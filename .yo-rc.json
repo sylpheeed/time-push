@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "timePush",
+    "style": "sass",
+    "postcss": true
+  }
+}
