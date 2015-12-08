@@ -40,7 +40,7 @@ class DescriptionComponent extends React.Component {
     this.setState(this.data(), function () {
       if (this.state.active && !this.state.timer) {
         this.activateTimer();
-      } else if (!this.state.active) {
+      } else if (!this.state.active && this.state.timer) {
         this.stopTimer()
       }
     });
