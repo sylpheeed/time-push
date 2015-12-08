@@ -15,24 +15,35 @@ class DescriptionComponent extends React.Component {
   data() {
     return {
       description: GameStore.currentLevel().description,
-      time: GameStore.currentLevel().time,
-      active: GameStore.isLevelActive(),
-      started: false
+      startTime: GameStore.currentLevel().startTime,
+      active: GameStore.isLevelActive()
     }
   }
 
   activateTimer() {
-    if (this.state.active && this.state.time > 0) {
-      this.setState({
-        time: this.state.time - 1,
-        started: true
-      });
-      setTimeout(this.activateTimer.bind(this), 1000)
-    }
+    this.setState({timer: setInterval(this.decreaseTimer.bind(this), 1000)});
+  }
+
+  stopTimer() {
+    clearInterval(this.state.timer);
+    this.setState({timer: false});
+  }
+
+  decreaseTimer() {
+    this.setState({
+      startTime: this.state.startTime - 1,
+      level: GameStore.currentLevel().id
+    });
   }
 
   _change() {
-    this.setState(this.data());
+    this.setState(this.data(), function () {
+      if (this.state.active && !this.state.timer) {
+        this.activateTimer();
+      } else if (!this.state.active) {
+        this.stopTimer()
+      }
+    });
   }
 
   componentDidMount() {
@@ -43,11 +54,6 @@ class DescriptionComponent extends React.Component {
     GameStore.removeChangeListener(this._change);
   }
 
-  componentDidUpdate() {
-    if (!this.state.started) {
-      this.activateTimer();
-    }
-  }
 
   render() {
     let level = this.state;
@@ -58,7 +64,7 @@ class DescriptionComponent extends React.Component {
           {level.description}
         </div>
         <div className="description-timer">
-          {level.time}
+          {level.startTime}
         </div>
       </div>
     );

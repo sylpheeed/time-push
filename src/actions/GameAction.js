@@ -9,7 +9,7 @@ export default {
 
   nextLevel(){
     AppDispatcher.dispatch({
-      event: 'game:nextLevel'
+      event: 'game:nextRound'
     });
   }
 };

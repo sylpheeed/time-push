@@ -10,11 +10,13 @@ let _states = {
 let _levels = [
   {
     description: 'First level text',
-    time: 30,
+    startTime: 30,
+    roundCount: 5,
     state: _states.waiting
   }, {
     description: 'Second level text',
-    time: 20,
+    startTime: 20,
+    roundCount: 5,
     state: _states.waiting
   }
 ];
@@ -43,6 +45,7 @@ let _colors = [
 ];
 
 let _currentLevel = 0;
+let _currentRound = 1;
 let _activeColor = Helpers.getRandom(0, _colors.length - 1);
 
 class GameStore extends EventEmitter {
@@ -89,12 +92,22 @@ let store = new GameStore();
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
     case 'game:start':
-      _levels[_currentLevel].state = _states.active;
-      store.emitChange();
+      if (store.currentLevel().state != _states.active) {
+        store.currentLevel().state = _states.active;
+        store.emitChange();
+      }
       break;
-    case 'game:nextLevel':
-      _currentLevel += 1;
-      store.emitChange();
+    case 'game:nextRound':
+      if (store.currentLevel().state == _states.active) {
+        _currentRound += 1;
+        if (store.currentLevel().roundCount > _currentRound) {
+          store.currentLevel().startTime = parseInt(store.currentLevel().startTime / 2)
+        } else {
+          _currentRound = 1;
+          _currentLevel += 1;
+        }
+        store.emitChange();
+      }
       break;
   }
   return true;
