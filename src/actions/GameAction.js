@@ -11,5 +11,11 @@ export default {
     AppDispatcher.dispatch({
       event: 'game:nextRound'
     });
+  },
+
+  defeat(){
+    AppDispatcher.dispatch({
+      event: 'game:defeat'
+    });
   }
 };

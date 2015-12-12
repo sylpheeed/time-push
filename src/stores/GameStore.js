@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import Helpers from 'sources/helpers'
+import Helpers from 'sources/helpers';
+import Colors from 'sources/Colors';
 import AppDispatcher from '../sources/AppDispatcher';
 
 let _states = {
@@ -9,14 +10,12 @@ let _states = {
 
 let _levels = [
   {
-    description: 'First level text',
-    startTime: 30,
-    roundCount: 5,
+    description: 'Select color: ',
+    roundSeconds: [30, 20, 10, 5],
     state: _states.waiting
   }, {
     description: 'Second level text',
-    startTime: 20,
-    roundCount: 5,
+    roundSeconds: [30, 20, 10, 5],
     state: _states.waiting
   }
 ];
@@ -25,28 +24,16 @@ let _settings = {
   blockCount: 4
 };
 
-let _colors = [
-  '#FF0000',
-  '#FFC000',
-  '#E0FF00',
-  '#7EFF00',
-  '#21FF00',
-  '#00FF41',
-  '#00FF9F',
-  '#00FDFF',
-  '#009FFF',
-  '#003DFF',
-  '#2100FF',
-  '#8300FF',
-  '#E500FF',
-  '#0052FF',
-  '#FF007C',
-  '#1000FF'
-];
 
 let _currentLevel = 0;
-let _currentRound = 1;
-let _activeColor = Helpers.getRandom(0, _colors.length - 1);
+let _currentRound = 0;
+let _activeColor = Colors.sample();
+
+var _private = {
+  changeColor(){
+    _activeColor = Colors.sample();
+  }
+};
 
 class GameStore extends EventEmitter {
   currentLevel() {
@@ -70,7 +57,15 @@ class GameStore extends EventEmitter {
   }
 
   activeColor() {
-    return _colors[_activeColor];
+    return _activeColor;
+  }
+
+  roundTime() {
+    return _levels[_currentLevel].roundSeconds[_currentRound];
+  }
+
+  round() {
+    return _currentRound;
   }
 
   emitChange() {
@@ -100,10 +95,8 @@ AppDispatcher.register(function (payload) {
     case 'game:nextRound':
       if (store.currentLevel().state == _states.active) {
         _currentRound += 1;
-        if (store.currentLevel().roundCount > _currentRound) {
-          store.currentLevel().startTime = parseInt(store.currentLevel().startTime / 2)
-        } else {
-          _currentRound = 1;
+        if (store.currentLevel().roundSeconds.length == _currentRound) {
+          _currentRound = 0;
           _currentLevel += 1;
         }
         store.emitChange();
