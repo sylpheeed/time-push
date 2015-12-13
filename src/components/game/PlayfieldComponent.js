@@ -4,6 +4,8 @@ import React from 'react';
 import GameAction from 'actions/GameAction';
 import Colors from 'sources/Colors';
 require('styles/game/Playfield.sass');
+import Level1 from './levels/Level1Component.js';
+
 
 class PlayfieldComponent extends React.Component {
 
@@ -12,57 +14,14 @@ class PlayfieldComponent extends React.Component {
     this.state = {result: []};
   }
 
-  handleActive() {
-    GameAction.nextLevel();
+  currentLevel() {
+    return React.createElement(Level1, {});
   }
-
-  handleError() {
-    GameAction.defeat();
-  }
-
-  block(k) {
-    let blockStyle = {
-      background: Colors.sample()
-    };
-    return <div onClick={this.handleError} style={blockStyle} key={k} className="playfield-block"></div>;
-  }
-
-  activeBlock(k) {
-    let blockStyle = {
-      background: this.props.activeColor
-    };
-    return <div onClick={this.handleActive} key={k} style={blockStyle} className="playfield-block"></div>;
-  }
-
-  isRoundChanged() {
-    return this.state.round == undefined || this.state.round != this.props.round;
-  }
-
-  blocks() {
-    if (this.isRoundChanged()) {
-      let state = {round: this.props.round, result: []};
-      let settings = this.props.settings;
-
-      for (let i = 0; i < settings.blockCount; i++) {
-        if (i == this.props.activeBlock) {
-          state.result.push(this.activeBlock(i));
-        } else {
-          state.result.push(this.block(i));
-        }
-      }
-      this.setState(state);
-    }
-  }
-
-  componentDidUpdate() {
-    this.blocks();
-  }
-
 
   render() {
     return (
       <div className="playfield-component">
-        {this.state.result}
+        {this.currentLevel()}
       </div>
     );
   }

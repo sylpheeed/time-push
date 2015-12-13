@@ -19,12 +19,8 @@ let _colors = [
   '#1000FF'
 ];
 
-
-class Colors {
+export default {
   sample() {
     return _colors[Helpers.getRandom(0, _colors.length - 1)];
   }
 }
-
-
-export default new Colors()
