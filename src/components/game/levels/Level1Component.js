@@ -4,27 +4,41 @@ import React from 'react';
 import GameAction from 'actions/GameAction';
 import Colors from 'sources/Colors';
 import Level1Store from 'stores/Level1Store';
+import LevelAction from 'actions/LevelAction';
 
 require('styles/game/levels/Level1.sass');
 
 class Level1Component extends React.Component {
 
+  addUsedColor(color) {
+    this.usedColors.push(color);
+  }
 
   constructor() {
     super();
     this.state = this.data();
+    this._change = this._change.bind(this);
+    this.usedColors = [];
   }
 
   _change() {
-    this.setState(this.data())
+    this.usedColors = [Level1Store.activeColor()];
+    this.setState(this.data(), function () {
+      GameAction.color(Level1Store.activeColor());
+      GameAction.timer(Level1Store.roundTime());
+    })
   }
 
   data() {
-    return {};
+    return {
+      blockCount: Level1Store.level().blockCount,
+      activeBlock: Level1Store.activeBlock(),
+      activeColor: Level1Store.activeColor()
+    };
   }
 
   handleActive() {
-    GameAction.nextLevel();
+    LevelAction.nextRound(1);
   }
 
   handleError() {
@@ -32,26 +46,33 @@ class Level1Component extends React.Component {
   }
 
   block(k) {
+    let color = this.state.activeColor;
+    while (this.usedColors.indexOf(color) >= 0) {
+      color = Colors.sample()
+    }
+    this.addUsedColor(color);
     let blockStyle = {
-      background: Colors.sample()
+      background: color
     };
     return <div onClick={this.handleError} style={blockStyle} key={k} className="playfield-block"></div>;
   }
 
   activeBlock(k) {
     let blockStyle = {
-      background: this.props.activeColor
+      background: this.state.activeColor
     };
     return <div onClick={this.handleActive} key={k} style={blockStyle} className="playfield-block"></div>;
   }
 
   blocks() {
     let result = [];
-    for (let i = 0; i < settings.blockCount; i++) {
-      if (i == this.props.activeBlock) {
-        result.push(this.activeBlock(i));
-      } else {
-        result.push(this.block(i));
+    if (Level1Store.isActive()) {
+      for (let i = 0; i < this.state.blockCount; i++) {
+        if (i == this.state.activeBlock) {
+          result.push(this.activeBlock(i));
+        } else {
+          result.push(this.block(i));
+        }
       }
     }
 
@@ -59,11 +80,12 @@ class Level1Component extends React.Component {
   }
 
   componentDidMount() {
-    DescriptionStore.addChangeListener(this._change);
+    Level1Store.addChangeListener(this._change);
+    GameAction.description(Level1Store.level().description)
   }
 
   componentWillUnmount() {
-    DescriptionStore.removeChangeListener(this._change);
+    Level1Store.removeChangeListener(this._change);
   }
 
   render() {

@@ -7,15 +7,24 @@ export default {
     });
   },
 
-  nextLevel(){
+  timer(seconds){
     AppDispatcher.dispatch({
-      event: 'game:nextRound'
+      event: 'game:timer',
+      seconds: seconds
     });
   },
 
-  defeat(){
+  color(color){
     AppDispatcher.dispatch({
-      event: 'game:defeat'
+      event: 'game:color',
+      color: color
+    });
+  },
+
+  description(description){
+    AppDispatcher.dispatch({
+      event: 'game:description',
+      description: description
     });
   }
 };

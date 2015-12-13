@@ -4,21 +4,15 @@ import Colors from 'sources/Colors';
 import BaseStore from './BaseStore.js';
 import AppDispatcher from 'sources/AppDispatcher';
 
-
-let _states = {
-  waiting: 0,
-  active: 1
-};
-
 let _level = {
   description: 'Select color: ',
   roundSeconds: [30, 20, 10, 5],
-  state: _states.waiting,
   blockCount: 4
 };
 
 let _currentRound = 0;
 let _activeColor = Colors.sample();
+let _active = false;
 
 class Level1Store extends BaseStore {
   level() {
@@ -26,7 +20,7 @@ class Level1Store extends BaseStore {
   }
 
   activeBlock() {
-    return Helpers.getRandom(1, _settings.blockCount) - 1;
+    return Helpers.getRandom(1, _level.blockCount) - 1;
   }
 
   activeColor() {
@@ -37,8 +31,8 @@ class Level1Store extends BaseStore {
     return _level.roundSeconds[_currentRound];
   }
 
-  round() {
-    return _currentRound;
+  isActive() {
+    return _active;
   }
 
 }
@@ -47,16 +41,14 @@ let store = new Level1Store();
 
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
-    case 'game:1:start':
-      if (store.currentLevel().state != _states.active) {
-        store.currentLevel().state = _states.active;
-        store.emitChange();
-      }
+    case 'game:start':
+      _active = true;
+      store.emitChange();
       break;
     case 'game:1:nextRound':
-      if (store.currentLevel().state == _states.active) {
+      if (_active) {
         _currentRound += 1;
-        if (store.currentLevel().roundSeconds.length == _currentRound) {
+        if (_level.roundSeconds.length == _currentRound) {
           _currentRound = 0;
           _currentLevel += 1;
         }

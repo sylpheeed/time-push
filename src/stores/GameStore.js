@@ -15,7 +15,7 @@ let _seconds;
 let _state;
 let _color;
 
-class DescriptionStore extends BaseStore {
+class GameStore extends BaseStore {
   description() {
     return _description;
   }
@@ -33,30 +33,29 @@ class DescriptionStore extends BaseStore {
   }
 }
 
-let store = new DescriptionStore();
+let store = new GameStore();
 
 AppDispatcher.register(function (payload) {
-  let data = payload.data;
+  console.warn(payload);
   switch (payload.event) {
     case 'game:start':
       if (_state != _states.active) {
-        _description = data.description;
-        _state.state = _states.active;
+        _state = _states.active;
         store.emitChange();
       }
       break;
+    case 'game:description':
+      _description = payload.description;
+      store.emitChange();
+      break;
     case 'game:timer':
-      if (_state == _states.active) {
-        _seconds = data.seconds;
-        store.emitChange();
-      }
+      _seconds = payload.seconds;
+      store.emitChange();
       break;
 
     case 'game:color':
-      if (_state == _states.active) {
-        _color = data.color;
-        store.emitChange();
-      }
+      _color = payload.color;
+      store.emitChange();
       break;
   }
   return true;

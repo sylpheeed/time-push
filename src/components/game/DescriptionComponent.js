@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import DescriptionStore from 'stores/DescriptionStore';
+import GameStore from 'stores/GameStore';
 
 require('styles/game/Description.sass');
 
@@ -13,10 +13,10 @@ class DescriptionComponent extends React.Component {
 
   data() {
     return {
-      description: DescriptionStore.description(),
-      time: DescriptionStore.seconds(),
-      active: DescriptionStore.isActive(),
-      color: DescriptionStore.color()
+      description: GameStore.description(),
+      time: GameStore.seconds(),
+      active: GameStore.isActive(),
+      color: GameStore.color()
     }
   }
 
@@ -40,7 +40,7 @@ class DescriptionComponent extends React.Component {
   }
 
   _change() {
-    this.setState(this.data(), function () {
+    this.setState(this.data(), () => {
       if (this.state.active && !this.state.timer) {
         this.activateTimer();
       }
@@ -52,11 +52,11 @@ class DescriptionComponent extends React.Component {
 
 
   componentDidMount() {
-    DescriptionStore.addChangeListener(this._change);
+    GameStore.addChangeListener(this._change);
   }
 
   componentWillUnmount() {
-    DescriptionStore.removeChangeListener(this._change);
+    GameStore.removeChangeListener(this._change);
   }
 
   block() {
@@ -67,7 +67,7 @@ class DescriptionComponent extends React.Component {
   }
 
   render() {
-    let level = this.props;
+    let level = this.state;
 
     return (
       <div className="description-component">
