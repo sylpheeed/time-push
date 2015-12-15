@@ -1,10 +1,23 @@
 import { EventEmitter } from 'events';
 import AppDispatcher from '../sources/AppDispatcher';
 
-let _currentLevel = 0;
-let _currentRound = 0;
+let _level = 1;
+let _scores = 0;
+let _gameOver = false;
 
-class UserStore extends EventEmitter {
+class PlayerStore extends EventEmitter {
+
+  level() {
+    return _level;
+  }
+
+  scores() {
+    return _scores;
+  }
+
+  gameOver() {
+    return _gameOver;
+  }
 
   emitChange() {
     this.emit('change');
@@ -20,25 +33,24 @@ class UserStore extends EventEmitter {
 
 }
 
-let store = new GameStore();
+let store = new PlayerStore();
 
 AppDispatcher.register(function (payload) {
+  console.warn(payload);
   switch (payload.event) {
-    case 'game:start':
-      if (store.currentLevel().state != _states.active) {
-        store.currentLevel().state = _states.active;
+    case 'player:addScores':
+      if (payload.scores && payload.scores > 0) {
+        _scores += payload.scores;
         store.emitChange();
       }
       break;
-    case 'game:nextRound':
-      if (store.currentLevel().state == _states.active) {
-        _currentRound += 1;
-        if (store.currentLevel().roundSeconds.length == _currentRound) {
-          _currentRound = 0;
-          _currentLevel += 1;
-        }
-        store.emitChange();
-      }
+    case 'player:levelUp':
+      _level += 1;
+      store.emitChange();
+      break;
+    case 'player:gameOver':
+      _gameOver = true;
+      store.emitChange();
       break;
   }
   return true;

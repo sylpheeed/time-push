@@ -5,14 +5,11 @@ import GameAction from 'actions/GameAction';
 import Colors from 'sources/Colors';
 import Level1Store from 'stores/Level1Store';
 import LevelAction from 'actions/LevelAction';
+import PlayerAction from 'actions/PlayerAction';
 
 require('styles/game/levels/Level1.sass');
 
 class Level1Component extends React.Component {
-
-  addUsedColor(color) {
-    this.usedColors.push(color);
-  }
 
   constructor() {
     super();
@@ -22,22 +19,32 @@ class Level1Component extends React.Component {
   }
 
   _change() {
-    this.usedColors = [Level1Store.activeColor()];
-    this.setState(this.data(), function () {
-      GameAction.color(Level1Store.activeColor());
-      GameAction.timer(Level1Store.roundTime());
-    })
+    if (Level1Store.isFinish()) {
+      PlayerAction.levelUp();
+    } else {
+      this.usedColors = [Level1Store.level().activeColor];
+      this.setState(this.data(), function () {
+        GameAction.color(Level1Store.level().activeColor);
+        GameAction.timer(Level1Store.roundTime());
+      })
+    }
   }
 
   data() {
     return {
       blockCount: Level1Store.level().blockCount,
       activeBlock: Level1Store.activeBlock(),
-      activeColor: Level1Store.activeColor()
+      activeColor: Level1Store.level().activeColor
     };
   }
 
+  addUsedColor(color) {
+    this.usedColors.push(color);
+  }
+
+
   handleActive() {
+    PlayerAction.addScores(Level1Store.level().scoresBonus);
     LevelAction.nextRound(1);
   }
 

@@ -36,7 +36,6 @@ class GameStore extends BaseStore {
 let store = new GameStore();
 
 AppDispatcher.register(function (payload) {
-  console.warn(payload);
   switch (payload.event) {
     case 'game:start':
       if (_state != _states.active) {
