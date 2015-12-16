@@ -19,15 +19,17 @@ class Level1Component extends React.Component {
   }
 
   _change() {
-    if (Level1Store.isFinish()) {
-      PlayerAction.levelUp();
-    } else {
-      this.usedColors = [Level1Store.level().activeColor];
-      this.setState(this.data(), function () {
+    this.usedColors = [Level1Store.level().activeColor];
+    this.setState(this.data(), function () {
+      if (Level1Store.isFinish()) {
+        PlayerAction.levelUp();
+        GameAction.finish();
+      } else {
         GameAction.color(Level1Store.level().activeColor);
         GameAction.timer(Level1Store.roundTime());
-      })
-    }
+      }
+    })
+
   }
 
   data() {

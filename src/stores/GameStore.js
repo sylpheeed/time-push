@@ -43,6 +43,12 @@ AppDispatcher.register(function (payload) {
         store.emitChange();
       }
       break;
+    case 'game:finish':
+      if (_state == _states.active) {
+        _state = _states.waiting;
+        store.emitChange();
+      }
+      break;
     case 'game:description':
       _description = payload.description;
       store.emitChange();

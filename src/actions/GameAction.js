@@ -7,6 +7,12 @@ export default {
     });
   },
 
+  finish(){
+    AppDispatcher.dispatch({
+      event: 'game:finish'
+    });
+  },
+
   timer(seconds){
     AppDispatcher.dispatch({
       event: 'game:timer',
