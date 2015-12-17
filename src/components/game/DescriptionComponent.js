@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import GameStore from 'stores/GameStore';
+import PlayerAction from 'actions/PlayerAction';
 
 require('styles/game/Description.sass');
 
@@ -9,7 +10,8 @@ class DescriptionComponent extends React.Component {
     super();
     this.state = this.data();
     this._change = this._change.bind(this);
-    this.timer = this.timer.bind(this);
+    this.timerView = this.timerView.bind(this);
+    this.timer = false;
   }
 
   data() {
@@ -22,36 +24,37 @@ class DescriptionComponent extends React.Component {
   }
 
   activateTimer() {
-    this.setState({timer: setInterval(this.decreaseTimer.bind(this), 1000)});
+    this.timer = setInterval(this.decreaseTimer.bind(this), 1000);
   }
 
   stopTimer() {
-    clearInterval(this.state.timer);
-    this.setState({timer: false});
+    clearInterval(this.timer);
+    this.timer = false
   }
 
   decreaseTimer() {
-    if (this.state.time > 0) {
+    if (this.state.time > 1) {
       this.setState({
         time: this.state.time - 1
       });
     } else {
-      //GameAction.defeat()
+      this.stopTimer();
+      PlayerAction.gameOver();
     }
   }
 
   _change() {
     this.setState(this.data(), () => {
-      if (this.state.active && !this.state.timer) {
+      if (this.state.active && !this.timer) {
         this.activateTimer();
       }
-      if (!this.state.active && this.state.timer) {
+      if (!this.state.active && this.timer) {
         this.stopTimer()
       }
     });
   }
 
-  timer() {
+  timerView() {
     return this.state.active ? this.state.time : ''
   }
 
@@ -81,7 +84,7 @@ class DescriptionComponent extends React.Component {
           Active block {this.block()}
         </div>
         <div className="description-timer">
-          {this.timer()}
+          {this.timerView()}
         </div>
       </div>
     );

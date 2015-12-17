@@ -12,5 +12,11 @@ export default {
       event: 'player:addScores',
       scores: scores
     });
+  },
+
+  gameOver(){
+    AppDispatcher.dispatch({
+      event: 'player:gameOver'
+    });
   }
 };

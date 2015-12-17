@@ -33,7 +33,12 @@ class ControlsComponent extends React.Component {
 
   startButton() {
     if (this.state.show) {
-      return <button onClick={this.handleStart.bind(null, this.props.level)} className="controls-start">Start</button>;
+      return (
+        <div className="controls-component-play">
+          Play!
+          <i className="fa fa-play" onClick={this.handleStart.bind(null, this.props.level)}></i>
+        </div>
+      )
     }
   }
 

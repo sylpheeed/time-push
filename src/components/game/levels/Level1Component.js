@@ -52,7 +52,7 @@ class Level1Component extends React.Component {
   }
 
   handleError() {
-    GameAction.defeat();
+    PlayerAction.gameOver();
   }
 
   block(k) {

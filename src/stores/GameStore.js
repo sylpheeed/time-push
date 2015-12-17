@@ -59,6 +59,7 @@ AppDispatcher.register(function (payload) {
       _color = payload.color;
       store.emitChange();
       break;
+
   }
   return true;
 });
