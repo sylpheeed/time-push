@@ -9,6 +9,7 @@ class DescriptionComponent extends React.Component {
     super();
     this.state = this.data();
     this._change = this._change.bind(this);
+    this.timer = this.timer.bind(this);
   }
 
   data() {
@@ -50,6 +51,9 @@ class DescriptionComponent extends React.Component {
     });
   }
 
+  timer() {
+    return this.state.active ? this.state.time : ''
+  }
 
   componentDidMount() {
     GameStore.addChangeListener(this._change);
@@ -67,18 +71,17 @@ class DescriptionComponent extends React.Component {
   }
 
   render() {
-    let level = this.state;
 
     return (
       <div className="description-component">
         <div className="description-text">
-          {level.description}
+          {this.state.description}
         </div>
         <div className="description-active-block">
           Active block {this.block()}
         </div>
         <div className="description-timer">
-          {level.time}
+          {this.timer()}
         </div>
       </div>
     );

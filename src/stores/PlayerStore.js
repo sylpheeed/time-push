@@ -36,7 +36,6 @@ class PlayerStore extends EventEmitter {
 let store = new PlayerStore();
 
 AppDispatcher.register(function (payload) {
-  console.warn(payload);
   switch (payload.event) {
     case 'player:addScores':
       if (payload.scores && payload.scores > 0) {

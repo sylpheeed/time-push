@@ -3,7 +3,7 @@
 import React from 'react';
 import GameAction from 'actions/GameAction';
 import Colors from 'sources/Colors';
-import Level1Store from 'stores/Level1Store';
+import LevelStore from 'stores/Level1Store';
 import LevelAction from 'actions/LevelAction';
 import PlayerAction from 'actions/PlayerAction';
 
@@ -15,18 +15,19 @@ class Level1Component extends React.Component {
     super();
     this.state = this.data();
     this._change = this._change.bind(this);
+    this.handleActive = this.handleActive.bind(this);
     this.usedColors = [];
   }
 
   _change() {
-    this.usedColors = [Level1Store.level().activeColor];
+    this.usedColors = [LevelStore.level().activeColor];
     this.setState(this.data(), function () {
-      if (Level1Store.isFinish()) {
+      if (LevelStore.isFinish()) {
         PlayerAction.levelUp();
         GameAction.finish();
       } else {
-        GameAction.color(Level1Store.level().activeColor);
-        GameAction.timer(Level1Store.roundTime());
+        GameAction.color(LevelStore.level().activeColor);
+        GameAction.timer(LevelStore.roundTime());
       }
     })
 
@@ -34,9 +35,9 @@ class Level1Component extends React.Component {
 
   data() {
     return {
-      blockCount: Level1Store.level().blockCount,
-      activeBlock: Level1Store.activeBlock(),
-      activeColor: Level1Store.level().activeColor
+      blockCount: LevelStore.level().blockCount,
+      activeBlock: LevelStore.activeBlock(),
+      activeColor: LevelStore.level().activeColor
     };
   }
 
@@ -46,8 +47,8 @@ class Level1Component extends React.Component {
 
 
   handleActive() {
-    PlayerAction.addScores(Level1Store.level().scoresBonus);
-    LevelAction.nextRound(1);
+    PlayerAction.addScores(LevelStore.level().scoresBonus);
+    LevelAction.nextRound(this.props.level);
   }
 
   handleError() {
@@ -75,7 +76,7 @@ class Level1Component extends React.Component {
 
   blocks() {
     let result = [];
-    if (Level1Store.isActive()) {
+    if (LevelStore.isActive()) {
       for (let i = 0; i < this.state.blockCount; i++) {
         if (i == this.state.activeBlock) {
           result.push(this.activeBlock(i));
@@ -89,12 +90,12 @@ class Level1Component extends React.Component {
   }
 
   componentDidMount() {
-    Level1Store.addChangeListener(this._change);
-    GameAction.description(Level1Store.level().description)
+    LevelStore.addChangeListener(this._change);
+    GameAction.description(LevelStore.level().description)
   }
 
   componentWillUnmount() {
-    Level1Store.removeChangeListener(this._change);
+    LevelStore.removeChangeListener(this._change);
   }
 
   render() {

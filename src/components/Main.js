@@ -41,7 +41,7 @@ class AppComponent extends React.Component {
       <div className="index">
         <GameDescription/>
         <GamePlayfield level={this.state.level}/>
-        <GameControls/>
+        <GameControls level={this.state.level}/>
         <Scores scores={this.state.scores}/>
       </div>
     );
