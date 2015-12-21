@@ -11,7 +11,6 @@ let _level = {
 };
 
 let _currentRound = 0;
-let _active = false;
 let _finish = false;
 let _activeColor = Colors.sample();
 
@@ -28,10 +27,6 @@ class Level2Store extends BaseStore {
     return _level.roundSeconds[_currentRound];
   }
 
-  isActive() {
-    return _active;
-  }
-
   isFinish() {
     return _finish;
   }
@@ -46,10 +41,6 @@ let store = new Level2Store();
 
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
-    case 'game:2:start':
-      _active = true;
-      store.emitChange();
-      break;
     case 'game:2:nextRound':
       if (_active) {
         _currentRound += 1;

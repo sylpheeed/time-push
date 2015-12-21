@@ -3,12 +3,13 @@ require('styles/App.css');
 require('styles/animate.css');
 
 import React from 'react';
-import GameDescription from './game/DescriptionComponent';
+import GameTimer from './game/TimerComponent';
 import GamePlayfield from './game/PlayfieldComponent';
 import GameControls from './game/ControlsComponent';
 import GameOverControls from './game/GameOverComponent';
 import Scores from './game/ScoresComponent';
 import PlayerStore from 'stores/PlayerStore';
+import GameStore from 'stores/GameStore';
 
 class AppComponent extends React.Component {
 
@@ -32,15 +33,27 @@ class AppComponent extends React.Component {
 
   componentDidMount() {
     PlayerStore.addChangeListener(this._change);
+    GameStore.addChangeListener(this._change);
   }
 
   componentWillUnmount() {
     PlayerStore.removeChangeListener(this._change);
+    GameStore.removeChangeListener(this._change);
   }
 
+  playField(level) {
+    if (GameStore.isActive()) {
+      return <GamePlayfield level={level}/>
+    }
+  }
+
+  gameControls() {
+    if (GameStore.isStop()) {
+      return <GameControls active={GameStore.isStop()}/>
+    }
+  }
 
   render() {
-
     if (this.state.gameOver) {
       return (
         <div className="index">
@@ -49,12 +62,13 @@ class AppComponent extends React.Component {
       )
     }
 
+    let state = this.state;
     return (
       <div className="index">
-        <GameDescription/>
-        <GamePlayfield level={this.state.level}/>
-        <GameControls level={this.state.level}/>
-        <Scores scores={this.state.scores}/>
+        <GameTimer active={GameStore.isActive()} waiting={GameStore.isWaiting()}/>
+        {this.playField(state.level)}
+        {this.gameControls()}
+        <Scores scores={state.scores}/>
       </div>
     );
   }

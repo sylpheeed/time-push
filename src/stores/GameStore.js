@@ -4,29 +4,24 @@ import AppDispatcher from 'sources/AppDispatcher';
 
 let _states = {
   waiting: 0,
-  active: 1
+  active: 1,
+  stop: 2
 };
 
-let _description;
-let _seconds;
-let _state;
-let _color;
+let _state = _states.stop;
 
 class GameStore extends BaseStore {
-  description() {
-    return _description;
-  }
-
-  seconds() {
-    return _seconds;
-  }
-
-  color() {
-    return _color;
-  }
 
   isActive() {
     return _state == _states.active;
+  }
+
+  isWaiting() {
+    return _state == _states.waiting;
+  }
+
+  isStop() {
+    return _state == _states.stop;
   }
 }
 
@@ -40,26 +35,18 @@ AppDispatcher.register(function (payload) {
         store.emitChange();
       }
       break;
-    case 'game:finish':
+    case 'game:waiting':
       if (_state == _states.active) {
         _state = _states.waiting;
         store.emitChange();
       }
       break;
-    case 'game:description':
-      _description = payload.description;
-      store.emitChange();
+    case 'game:stop':
+      if (_state == _states.active) {
+        _state = _states.stop;
+        store.emitChange();
+      }
       break;
-    case 'game:timer':
-      _seconds = payload.seconds;
-      store.emitChange();
-      break;
-
-    case 'game:color':
-      _color = payload.color;
-      store.emitChange();
-      break;
-
   }
   return true;
 });

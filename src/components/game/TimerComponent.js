@@ -1,12 +1,12 @@
 'use strict';
 import React from 'react';
-import GameStore from 'stores/GameStore';
+import TimerStore from 'stores/TimerStore';
 import PlayerAction from 'actions/PlayerAction';
 import classNames from 'classnames';
 
-require('styles/game/Description.sass');
+require('styles/game/Timer.sass');
 
-class DescriptionComponent extends React.Component {
+class TimerComponent extends React.Component {
   constructor() {
     super();
     this.state = this.data();
@@ -19,10 +19,9 @@ class DescriptionComponent extends React.Component {
   data() {
     this.nextRound = true;
     return {
-      description: GameStore.description(),
-      time: GameStore.seconds(),
-      active: GameStore.isActive(),
-      color: GameStore.color()
+      description: TimerStore.description(),
+      time: TimerStore.seconds(),
+      color: TimerStore.color()
     }
   }
 
@@ -48,11 +47,11 @@ class DescriptionComponent extends React.Component {
 
   _change() {
     this.stopTimer();
+    console.warn(this.props, this.data());
     this.setState(this.data(), () => {
-      if (this.state.active && !this.timer) {
+      if (this.props.active && !this.timer) {
         this.activateTimer();
       }
-
     });
   }
 
@@ -72,11 +71,11 @@ class DescriptionComponent extends React.Component {
   }
 
   componentDidMount() {
-    GameStore.addChangeListener(this._change);
+    TimerStore.addChangeListener(this._change);
   }
 
   componentWillUnmount() {
-    GameStore.removeChangeListener(this._change);
+    TimerStore.removeChangeListener(this._change);
   }
 
   block() {
@@ -102,6 +101,6 @@ class DescriptionComponent extends React.Component {
   }
 }
 
-DescriptionComponent.displayName = 'GameDescriptionComponent';
+TimerComponent.displayName = 'GameTimerComponent';
 
-export default DescriptionComponent;
+export default TimerComponent;

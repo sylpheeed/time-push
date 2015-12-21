@@ -75,13 +75,11 @@ class Level2Component extends React.Component {
 
   blocks() {
     let result = [];
-    if (LevelStore.isActive()) {
-      for (let i = 0; i < this.state.blockCount; i++) {
-        if (i == this.state.activeBlock) {
-          result.push(this.activeBlock(i));
-        } else {
-          result.push(this.block(i));
-        }
+    for (let i = 0; i < this.state.blockCount; i++) {
+      if (i == this.state.activeBlock) {
+        result.push(this.activeBlock(i));
+      } else {
+        result.push(this.block(i));
       }
     }
 

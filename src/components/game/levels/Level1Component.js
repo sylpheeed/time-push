@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import GameAction from 'actions/GameAction';
+import TimerAction from 'actions/TimerAction';
 import Colors from 'sources/Colors';
 import LevelStore from 'stores/Level1Store';
 import LevelAction from 'actions/LevelAction';
@@ -26,8 +26,7 @@ class Level1Component extends React.Component {
         PlayerAction.levelUp();
         GameAction.finish();
       } else {
-        GameAction.color(LevelStore.level().activeColor);
-        GameAction.timer(LevelStore.roundTime());
+        TimerAction.change(LevelStore.roundTime(), LevelStore.level().description);
       }
     })
 
@@ -76,13 +75,11 @@ class Level1Component extends React.Component {
 
   blocks() {
     let result = [];
-    if (LevelStore.isActive()) {
-      for (let i = 0; i < this.state.blockCount; i++) {
-        if (i == this.state.activeBlock) {
-          result.push(this.activeBlock(i));
-        } else {
-          result.push(this.block(i));
-        }
+    for (let i = 0; i < this.state.blockCount; i++) {
+      if (i == this.state.activeBlock) {
+        result.push(this.activeBlock(i));
+      } else {
+        result.push(this.block(i));
       }
     }
 
@@ -91,7 +88,7 @@ class Level1Component extends React.Component {
 
   componentDidMount() {
     LevelStore.addChangeListener(this._change);
-    GameAction.description(LevelStore.level().description)
+    TimerAction.color(LevelStore.level().activeColor);
   }
 
   componentWillUnmount() {
