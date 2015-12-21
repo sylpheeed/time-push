@@ -5,7 +5,7 @@ import AppDispatcher from 'sources/AppDispatcher';
 
 let _level = {
   description: 'Level 1',
-  roundSeconds: [30, 20, 10, 5],
+  roundSeconds: [30, 10, 5, 3],
   blockCount: 4,
   scoresBonus: 1,
   activeColor: Colors.sample()

@@ -2,6 +2,7 @@
 import React from 'react';
 import GameStore from 'stores/GameStore';
 import PlayerAction from 'actions/PlayerAction';
+import classNames from 'classnames';
 
 require('styles/game/Description.sass');
 
@@ -12,9 +13,11 @@ class DescriptionComponent extends React.Component {
     this._change = this._change.bind(this);
     this.timerView = this.timerView.bind(this);
     this.timer = false;
+    this.nextRound = false;
   }
 
   data() {
+    this.nextRound = true;
     return {
       description: GameStore.description(),
       time: GameStore.seconds(),
@@ -44,18 +47,28 @@ class DescriptionComponent extends React.Component {
   }
 
   _change() {
+    this.stopTimer();
     this.setState(this.data(), () => {
       if (this.state.active && !this.timer) {
         this.activateTimer();
       }
-      if (!this.state.active && this.timer) {
-        this.stopTimer()
-      }
+
     });
   }
 
   timerView() {
-    return this.state.active ? this.state.time : ''
+
+    if (this.state.active && this.nextRound) {
+      let className = classNames({
+        animated: true,
+        bounceIn: true
+      });
+      this.nextRound = false;
+      return <div className={className}>Next round</div>
+    }
+
+    let timer = this.state.active ? this.state.time : '';
+    return <div className="description-timer">{timer}</div>
   }
 
   componentDidMount() {
@@ -83,9 +96,7 @@ class DescriptionComponent extends React.Component {
         <div className="description-active-block">
           Active block {this.block()}
         </div>
-        <div className="description-timer">
-          {this.timerView()}
-        </div>
+        {this.timerView()}
       </div>
     );
   }

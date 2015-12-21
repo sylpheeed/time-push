@@ -1,5 +1,6 @@
 require('normalize.css');
 require('styles/App.css');
+require('styles/animate.css');
 
 import React from 'react';
 import GameDescription from './game/DescriptionComponent';
