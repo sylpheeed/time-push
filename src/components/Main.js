@@ -10,6 +10,7 @@ import GameOverControls from './game/GameOverComponent';
 import Scores from './game/ScoresComponent';
 import PlayerStore from 'stores/PlayerStore';
 import GameStore from 'stores/GameStore';
+import classNames from 'classnames';
 
 class AppComponent extends React.Component {
 
@@ -42,16 +43,24 @@ class AppComponent extends React.Component {
   }
 
   playField(level) {
-    if (GameStore.isActive()) {
-      return <GamePlayfield level={level}/>
+    if (GameStore.isActive() || GameStore.isWaiting()) {
+      let className = classNames({
+        hidden: GameStore.isWaiting()
+      });
+      return <div className={className}><GamePlayfield level={level}/></div>
     }
   }
 
-  gameTimer() {
-    if (GameStore.isActive()) {
+  gameTimer(level) {
+    if (GameStore.isActive() || GameStore.isWaiting()) {
       return <GameTimer waiting={GameStore.isWaiting()}/>
     } else {
-      return <h4 >Press play! button when you will be ready</h4>
+      return (
+        <div className="index-description">
+          <b>Level: {level}</b>
+          <div>When you will be ready press play!</div>
+        </div>
+      )
     }
   }
 
@@ -73,7 +82,7 @@ class AppComponent extends React.Component {
     let state = this.state;
     return (
       <div className="index">
-        {this.gameTimer()}
+        {this.gameTimer(state.level)}
         {this.playField(state.level)}
         {this.gameControls()}
         <Scores scores={state.scores}/>

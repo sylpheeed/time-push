@@ -7,9 +7,13 @@ body {
     text-align: center;
 }
 
-/*.index .index-start-description {*/
-    /**/
-/*}*/
+.index .index-description {
+    padding-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
 
 .index img {
     margin: 40px auto;

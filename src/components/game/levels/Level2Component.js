@@ -1,11 +1,12 @@
 'use strict';
 
 import React from 'react';
-import GameAction from 'actions/GameAction';
 import Colors from 'sources/Colors';
 import LevelStore from 'stores/Level2Store';
 import LevelAction from 'actions/LevelAction';
 import PlayerAction from 'actions/PlayerAction';
+import GameAction from 'actions/GameAction';
+import TimerAction from 'actions/TimerAction';
 
 require('styles/game/levels/Level2.sass');
 
@@ -23,10 +24,10 @@ class Level2Component extends React.Component {
     this.setState(this.data(), function () {
       if (LevelStore.isFinish()) {
         //PlayerAction.levelUp();
-        GameAction.finish();
+        GameAction.stop();
       } else {
-        GameAction.color(LevelStore.activeColor());
-        GameAction.timer(LevelStore.roundTime());
+        TimerAction.seconds(LevelStore.roundTime());
+        TimerAction.color(LevelStore.activeColor());
       }
     })
 
@@ -88,7 +89,8 @@ class Level2Component extends React.Component {
 
   componentDidMount() {
     LevelStore.addChangeListener(this._change);
-    GameAction.description(LevelStore.level().description)
+    TimerAction.description(LevelStore.level().description);
+    this._change();
   }
 
   componentWillUnmount() {
@@ -97,7 +99,7 @@ class Level2Component extends React.Component {
 
   render() {
     return (
-      <div className="level1-component">
+      <div className="level2-component">
         {this.blocks()}
       </div>
     );

@@ -42,15 +42,13 @@ let store = new Level2Store();
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
     case 'game:2:nextRound':
-      if (_active) {
-        _currentRound += 1;
-        _activeColor = Colors.sample();
-        if (_level.roundSeconds.length == _currentRound) {
-          _currentRound = 0;
-          _finish = true;
-        }
-        store.emitChange();
+      _currentRound += 1;
+      _activeColor = Colors.sample();
+      if (_level.roundSeconds.length == _currentRound) {
+        _currentRound = 0;
+        _finish = true;
       }
+      store.emitChange();
       break;
   }
   return true;

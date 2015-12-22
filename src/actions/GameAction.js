@@ -14,10 +14,9 @@ export default {
   },
 
 
-  color(color){
+  waiting(){
     AppDispatcher.dispatch({
-      event: 'game:color',
-      color: color
+      event: 'game:waiting'
     });
   }
 

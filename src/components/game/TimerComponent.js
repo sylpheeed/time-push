@@ -2,6 +2,7 @@
 import React from 'react';
 import TimerStore from 'stores/TimerStore';
 import PlayerAction from 'actions/PlayerAction';
+import GameAction from 'actions/GameAction';
 import classNames from 'classnames';
 
 require('styles/game/Timer.sass');
@@ -38,6 +39,11 @@ class TimerComponent extends React.Component {
     if (this.state.time > 1) {
       this.setState({
         time: this.state.time - 1
+      }, () => {
+        if (this.nextRound) {
+          this.nextRound = false;
+          GameAction.start();
+        }
       });
     } else {
       this.stopTimer();
@@ -47,7 +53,9 @@ class TimerComponent extends React.Component {
 
   _change() {
     this.stopTimer();
+    this.nextRound = true;
     this.setState(this.data(), () => {
+      GameAction.waiting();
       if (this.state.time && !this.timer) {
         this.activateTimer();
       }
@@ -55,17 +63,16 @@ class TimerComponent extends React.Component {
   }
 
   timerView() {
-    //if (this.state.active && this.nextRound) {
-    //  let className = classNames({
-    //    animated: true,
-    //    bounceIn: true
-    //  });
-    //  this.nextRound = false;
-    //  return <div className={className}>Next round</div>
-    //}
+    if (this.props.waiting) {
+      let className = classNames({
+        animated: true,
+        bounceIn: true
+      });
 
-    //let timer = this.state.active ? this.state.time : '';
-    return <div className="description-timer">{this.state.time}</div>
+      return <span className={className}>Next round</span>
+    }
+
+    return <span >{this.state.time}</span>
   }
 
   componentDidMount() {
@@ -85,7 +92,6 @@ class TimerComponent extends React.Component {
   }
 
   render() {
-
     return (
       <div className="description-component">
         <div className="description-text">
@@ -94,9 +100,13 @@ class TimerComponent extends React.Component {
         <div className="description-active-block">
           Active block {this.block()}
         </div>
-        {this.timerView()}
+        <div className="description-timer">
+          {this.timerView()}
+        </div>
+
       </div>
     );
+
   }
 }
 
