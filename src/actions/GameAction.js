@@ -7,30 +7,18 @@ export default {
     });
   },
 
-  finish(){
+  stop(){
     AppDispatcher.dispatch({
-      event: 'game:finish'
+      event: 'game:stop'
     });
   },
 
-  timer(seconds){
-    AppDispatcher.dispatch({
-      event: 'game:timer',
-      seconds: seconds
-    });
-  },
 
   color(color){
     AppDispatcher.dispatch({
       event: 'game:color',
       color: color
     });
-  },
-
-  description(description){
-    AppDispatcher.dispatch({
-      event: 'game:description',
-      description: description
-    });
   }
+
 };

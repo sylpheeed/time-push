@@ -1,10 +1,16 @@
 import AppDispatcher from '../sources/AppDispatcher';
 
 export default {
-  change(seconds, description){
+  seconds(seconds){
     AppDispatcher.dispatch({
-      event: 'timer:change',
-      seconds,
+      event: 'timer:seconds',
+      seconds
+    });
+  },
+
+  description(description){
+    AppDispatcher.dispatch({
+      event: 'timer:description',
       description
     });
   },

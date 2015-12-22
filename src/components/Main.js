@@ -47,6 +47,14 @@ class AppComponent extends React.Component {
     }
   }
 
+  gameTimer() {
+    if (GameStore.isActive()) {
+      return <GameTimer waiting={GameStore.isWaiting()}/>
+    } else {
+      return <h4 >Press start button when you will be ready</h4>
+    }
+  }
+
   gameControls() {
     if (GameStore.isStop()) {
       return <GameControls active={GameStore.isStop()}/>
@@ -65,7 +73,7 @@ class AppComponent extends React.Component {
     let state = this.state;
     return (
       <div className="index">
-        <GameTimer active={GameStore.isActive()} waiting={GameStore.isWaiting()}/>
+        {this.gameTimer()}
         {this.playField(state.level)}
         {this.gameControls()}
         <Scores scores={state.scores}/>

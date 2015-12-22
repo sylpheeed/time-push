@@ -47,27 +47,25 @@ class TimerComponent extends React.Component {
 
   _change() {
     this.stopTimer();
-    console.warn(this.props, this.data());
     this.setState(this.data(), () => {
-      if (this.props.active && !this.timer) {
+      if (this.state.time && !this.timer) {
         this.activateTimer();
       }
     });
   }
 
   timerView() {
+    //if (this.state.active && this.nextRound) {
+    //  let className = classNames({
+    //    animated: true,
+    //    bounceIn: true
+    //  });
+    //  this.nextRound = false;
+    //  return <div className={className}>Next round</div>
+    //}
 
-    if (this.state.active && this.nextRound) {
-      let className = classNames({
-        animated: true,
-        bounceIn: true
-      });
-      this.nextRound = false;
-      return <div className={className}>Next round</div>
-    }
-
-    let timer = this.state.active ? this.state.time : '';
-    return <div className="description-timer">{timer}</div>
+    //let timer = this.state.active ? this.state.time : '';
+    return <div className="description-timer">{this.state.time}</div>
   }
 
   componentDidMount() {
@@ -76,6 +74,7 @@ class TimerComponent extends React.Component {
 
   componentWillUnmount() {
     TimerStore.removeChangeListener(this._change);
+    this.stopTimer();
   }
 
   block() {

@@ -36,13 +36,13 @@ AppDispatcher.register(function (payload) {
       }
       break;
     case 'game:waiting':
-      if (_state == _states.active) {
+      if (_state != _states.waiting) {
         _state = _states.waiting;
         store.emitChange();
       }
       break;
     case 'game:stop':
-      if (_state == _states.active) {
+      if (_state != _states.stop) {
         _state = _states.stop;
         store.emitChange();
       }

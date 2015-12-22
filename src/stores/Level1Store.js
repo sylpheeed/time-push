@@ -38,14 +38,12 @@ let store = new Level1Store();
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
     case 'game:1:nextRound':
-      if (_active) {
-        _currentRound += 1;
-        if (_level.roundSeconds.length == _currentRound) {
-          _currentRound = 0;
-          _finish = true;
-        }
-        store.emitChange();
+      _currentRound += 1;
+      if (_level.roundSeconds.length == _currentRound) {
+        _currentRound = 0;
+        _finish = true;
       }
+      store.emitChange();
       break;
   }
   return true;

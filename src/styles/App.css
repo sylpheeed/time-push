@@ -2,6 +2,15 @@
 body {
 }
 
+.index {
+    margin-top: 50px;
+    text-align: center;
+}
+
+/*.index .index-start-description {*/
+    /**/
+/*}*/
+
 .index img {
     margin: 40px auto;
     border-radius: 4px;

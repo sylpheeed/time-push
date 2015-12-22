@@ -22,10 +22,12 @@ class TimerStore extends BaseStore {
 let store = new TimerStore();
 
 AppDispatcher.register(function (payload) {
-
   switch (payload.event) {
-    case 'timer:change':
+    case 'timer:description':
       _description = payload.description;
+      store.emitChange();
+      break;
+    case 'timer:seconds':
       _seconds = payload.seconds;
       store.emitChange();
       break;
