@@ -51,7 +51,7 @@ class AppComponent extends React.Component {
     if (GameStore.isActive()) {
       return <GameTimer waiting={GameStore.isWaiting()}/>
     } else {
-      return <h4 >Press start button when you will be ready</h4>
+      return <h4 >Press play! button when you will be ready</h4>
     }
   }
 
