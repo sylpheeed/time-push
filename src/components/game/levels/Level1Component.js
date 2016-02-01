@@ -55,13 +55,8 @@ class Level1Component extends React.Component {
   }
 
   block(k) {
-    let color = this.state.activeColor;
-    while (this.usedColors.indexOf(color) >= 0) {
-      color = Colors.sample()
-    }
-    this.addUsedColor(color);
     let blockStyle = {
-      background: color
+      background: Colors.uniqueColor()
     };
     return <div onClick={this.handleError} style={blockStyle} key={k} className="playfield-block"></div>;
   }
@@ -75,6 +70,7 @@ class Level1Component extends React.Component {
 
   blocks() {
     let result = [];
+    Colors.cleanCache(LevelStore.level().activeColor);
     for (let i = 0; i < this.state.blockCount; i++) {
       if (i == this.state.activeBlock) {
         result.push(this.activeBlock(i));
