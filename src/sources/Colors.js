@@ -19,8 +19,22 @@ let _colors = [
   '#1000FF'
 ];
 
+let CachedColors = [];
+
 export default {
   sample() {
     return _colors[Helpers.getRandom(0, _colors.length - 1)];
+  },
+
+  cleanCache(activeColor){
+    CachedColors = [activeColor];
+  },
+  uniqueColor(){
+    let color = this.sample();
+    if (CachedColors.indexOf(color) >= 0) {
+      return this.uniqueColor();
+    }
+    CachedColors.push(color);
+    return color;
   }
 }

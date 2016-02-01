@@ -4,15 +4,15 @@ import BaseStore from './BaseStore.js';
 import AppDispatcher from 'sources/AppDispatcher';
 
 let _level = {
-  description: 'Level 1',
-  roundSeconds: [30, 10, 5, 3],
-  blockCount: 4,
-  scoresBonus: 1,
-  activeColor: Colors.sample()
+  description: 'Level 3',
+  roundSeconds: [30, 20, 10, 5, 3],
+  blockCount: 6,
+  scoresBonus: 4
 };
 
 let _currentRound = 0;
 let _finish = false;
+let _activeColor = Colors.sample();
 
 class LevelStore extends BaseStore {
   level() {
@@ -31,14 +31,19 @@ class LevelStore extends BaseStore {
     return _finish;
   }
 
+  activeColor() {
+    return _activeColor;
+  }
+
 }
 
 let store = new LevelStore();
 
 AppDispatcher.register(function (payload) {
   switch (payload.event) {
-    case 'game:1:nextRound':
+    case 'game:3:nextRound':
       _currentRound += 1;
+      _activeColor = Colors.sample();
       if (_level.roundSeconds.length == _currentRound) {
         _currentRound = 0;
         _finish = true;

@@ -1,32 +1,32 @@
 'use strict';
 
 import React from 'react';
-import TimerAction from 'actions/TimerAction';
 import Colors from 'sources/Colors';
-import LevelStore from 'stores/Level1Store';
+import LevelStore from 'stores/Level3Store';
 import LevelAction from 'actions/LevelAction';
 import PlayerAction from 'actions/PlayerAction';
 import GameAction from 'actions/GameAction';
+import TimerAction from 'actions/TimerAction';
+import classNames from 'classnames';
+require('styles/game/levels/Level3.sass');
 
-class Level1Component extends React.Component {
-
+class Level2Component extends React.Component {
   constructor() {
     super();
     this.state = this.data();
     this._change = this._change.bind(this);
     this.handleActive = this.handleActive.bind(this);
-    this.usedColors = [];
+    this.currentRound = 0;
   }
 
   _change() {
-    this.usedColors = [LevelStore.level().activeColor];
     this.setState(this.data(), function () {
       if (LevelStore.isFinish()) {
-        PlayerAction.levelUp();
+        //PlayerAction.levelUp();
         GameAction.stop();
       } else {
         TimerAction.seconds(LevelStore.roundTime());
-        TimerAction.color(LevelStore.level().activeColor);
+        TimerAction.color(LevelStore.activeColor());
       }
     })
 
@@ -36,14 +36,9 @@ class Level1Component extends React.Component {
     return {
       blockCount: LevelStore.level().blockCount,
       activeBlock: LevelStore.activeBlock(),
-      activeColor: LevelStore.level().activeColor
+      activeColor: LevelStore.activeColor()
     };
   }
-
-  addUsedColor(color) {
-    this.usedColors.push(color);
-  }
-
 
   handleActive() {
     PlayerAction.addScores(LevelStore.level().scoresBonus);
@@ -55,26 +50,33 @@ class Level1Component extends React.Component {
   }
 
   block(k) {
-    let color = this.state.activeColor;
-    while (this.usedColors.indexOf(color) >= 0) {
-      color = Colors.sample()
-    }
-    this.addUsedColor(color);
     let blockStyle = {
-      background: color
+      background: Colors.uniqueColor()
     };
-    return <div onClick={this.handleError} style={blockStyle} key={k} className="playfield-block"></div>;
+
+    return (
+      <div className="bordered"  key={k}>
+        <div onClick={this.handleError} style={blockStyle} className="playfield-block animated fadeOut"></div>
+      </div>
+    )
   }
 
   activeBlock(k) {
     let blockStyle = {
       background: this.state.activeColor
     };
-    return <div onClick={this.handleActive} key={k} style={blockStyle} className="playfield-block"></div>;
+
+    return (
+      <div className="bordered" key={k}>
+        <div onClick={this.handleActive} style={blockStyle} className="playfield-block animated fadeOut"></div>
+      </div>
+    )
   }
 
   blocks() {
     let result = [];
+    Colors.cleanCache(LevelStore.activeColor());
+
     for (let i = 0; i < this.state.blockCount; i++) {
       if (i == this.state.activeBlock) {
         result.push(this.activeBlock(i));
@@ -98,13 +100,14 @@ class Level1Component extends React.Component {
 
   render() {
     return (
-      <div className="level1-component">
+      <div className="level3-component">
         {this.blocks()}
       </div>
     );
   }
 }
 
-Level1Component.displayName = 'GameLevelsLevel1Component';
+Level2Component.displayName = 'GameLevelsLevel3Component';
 
-export default Level1Component;
+
+export default Level2Component;

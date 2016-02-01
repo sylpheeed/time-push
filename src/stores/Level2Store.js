@@ -14,7 +14,7 @@ let _currentRound = 0;
 let _finish = false;
 let _activeColor = Colors.sample();
 
-class Level2Store extends BaseStore {
+class LevelStore extends BaseStore {
   level() {
     return _level;
   }
@@ -37,7 +37,7 @@ class Level2Store extends BaseStore {
 
 }
 
-let store = new Level2Store();
+let store = new LevelStore();
 
 AppDispatcher.register(function (payload) {
   switch (payload.event) {

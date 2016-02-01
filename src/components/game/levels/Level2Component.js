@@ -8,8 +8,6 @@ import PlayerAction from 'actions/PlayerAction';
 import GameAction from 'actions/GameAction';
 import TimerAction from 'actions/TimerAction';
 
-require('styles/game/levels/Level2.sass');
-
 class Level2Component extends React.Component {
   constructor() {
     super();
@@ -23,7 +21,7 @@ class Level2Component extends React.Component {
     this.usedColors = [LevelStore.activeColor()];
     this.setState(this.data(), function () {
       if (LevelStore.isFinish()) {
-        //PlayerAction.levelUp();
+        PlayerAction.levelUp();
         GameAction.stop();
       } else {
         TimerAction.seconds(LevelStore.roundTime());
