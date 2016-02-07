@@ -18,5 +18,11 @@ export default {
     AppDispatcher.dispatch({
       event: 'player:gameOver'
     });
+  },
+
+  repeat(){
+    AppDispatcher.dispatch({
+      event: 'player:repeat'
+    });
   }
 };

@@ -1,7 +1,9 @@
 import { EventEmitter } from 'events';
 import AppDispatcher from '../sources/AppDispatcher';
 
-let _level = 1;
+const _defaultLevel = 1;
+
+let _level = _defaultLevel;
 let _scores = 0;
 let _gameOver = false;
 
@@ -49,6 +51,12 @@ AppDispatcher.register(function (payload) {
       break;
     case 'player:gameOver':
       _gameOver = true;
+      store.emitChange();
+      break;
+    case 'player:repeat':
+      _level = _defaultLevel;
+      _scores = 0;
+      _gameOver = false;
       store.emitChange();
       break;
   }

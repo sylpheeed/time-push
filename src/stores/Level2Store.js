@@ -4,7 +4,7 @@ import BaseStore from './BaseStore.js';
 import AppDispatcher from 'sources/AppDispatcher';
 
 let _level = {
-  description: 'Level 2',
+  description: 'Watch out! Active color is changed every turn',
   roundSeconds: [30, 20, 10, 5],
   blockCount: 6,
   scoresBonus: 2
@@ -49,6 +49,9 @@ AppDispatcher.register(function (payload) {
         _finish = true;
       }
       store.emitChange();
+      break;
+    case 'player:repeat':
+      _currentRound = 0;
       break;
   }
   return true;

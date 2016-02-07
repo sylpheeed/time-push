@@ -16,7 +16,7 @@ class ControlsComponent extends React.Component {
   render() {
     return (
       <div className="controls-component">
-        <div className="controls-component-play" onClick={this.handleStart}>
+        <div className="controls-component-button" onClick={this.handleStart}>
           Play!
           <i className="fa fa-play"></i>
         </div>

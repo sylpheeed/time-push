@@ -4,7 +4,7 @@ import BaseStore from './BaseStore.js';
 import AppDispatcher from 'sources/AppDispatcher';
 
 let _level = {
-  description: 'Level 1',
+  description: 'Click on the active color block',
   roundSeconds: [30, 10, 5, 3],
   blockCount: 4,
   scoresBonus: 1,
@@ -44,6 +44,9 @@ AppDispatcher.register(function (payload) {
         _finish = true;
       }
       store.emitChange();
+      break;
+    case 'player:repeat':
+      _currentRound = 0;
       break;
   }
   return true;
